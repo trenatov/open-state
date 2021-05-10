@@ -65,7 +65,7 @@ jobs:
           docker login -u ${{ secrets.DOCKERHUB_USER_NAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
 
           sudo docker pull openplatform/open-state:${{ env.IMAGE_TAG }}
-          sudo docker run -d --name 'openplatform/open-state' --restart=always \
+          sudo docker run -d --name 'open-state' --restart=always \
                                                -p 8080:8080 \
                                                -e "BITCOIN_NODE=${{ secrets.PROD_BITCOIN_NODE }}" \
                                                -e "BITCOIN_USERNAME=${{ secrets.PROD_BITCOIN_USERNAME }}" \
