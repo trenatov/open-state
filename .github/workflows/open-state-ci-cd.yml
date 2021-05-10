@@ -64,12 +64,12 @@ jobs:
           export DOCKER_IMAGE_TAG="openplatform/open-state:${{ env.IMAGE_TAG }}"
           docker login -u ${{ secrets.DOCKERHUB_USER_NAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
 
-          docker stop openplatform/open-state
-          docker ps -a --filter='name=^/openplatform/open-state'
-          docker rm -f openplatform/open-state
-          docker rmi openplatform/open-state
-          docker pull openplatform/open-state:${{ env.IMAGE_TAG }}
-          docker run -d --name 'openplatform/open-state' --restart=always \
+          sudo docker stop openplatform/open-state
+          sudo docker ps -a --filter='name=^/openplatform/open-state'
+          sudo docker rm -f openplatform/open-state
+          sudo docker rmi openplatform/open-state
+          sudo docker pull openplatform/open-state:${{ env.IMAGE_TAG }}
+          sudo docker run -d --name 'openplatform/open-state' --restart=always \
                                                -p 8080:8080 \
                                                -e "BITCOIN_NODE=${{ secrets.PROD_BITCOIN_NODE }}" \
                                                -e "BITCOIN_USERNAME=${{ secrets.PROD_BITCOIN_USERNAME }}" \
