@@ -137,45 +137,11 @@ jobs:
           tags: openplatform/open-state:${{ env.IMAGE_TAG }}
           file: docker/Dockerfile
 
-
-  deploy-sprint:
-    name: Deploy Sprint
-    runs-on: ubuntu-latest
-    continue-on-error: false
-    needs: [tests, build, package]
-
-    steps:
-
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Deploy server
-        run: |
-          sudo apt install openssh-client
-          sudo curl -L "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-          eval $(ssh-agent -s)
-          echo "${{ secrets.SPRINT_DEPLOY_SSH_KEY }}" | tr -d '\r' | ssh-add - > /dev/null
-          mkdir -p ~/.ssh
-          chmod 700 ~/.ssh
-          ssh-keyscan ${{ secrets.SPRINT_SERVER }} >> ~/.ssh/known_hosts
-          chmod 644 ~/.ssh/known_hosts
-          export DOCKER_HOST="ssh://gitlab@${{ secrets.SPRINT_SERVER }}"
-          export BITCOIN_NODE="${{ secrets.SPRINT_BITCOIN_NODE }}"
-          export BITCOIN_USERNAME="${{ secrets.SPRINT_BITCOIN_USERNAME }}"
-          export BITCOIN_PASSWORD="${{ secrets.SPRINT_BITCOIN_PASSWORD }}"
-          export ETHEREUM_NODE_ADDRESS="${{ secrets.SPRINT_ETHEREUM_NODE_ADDRESS }}"
-          export MONGODB_PASSWORD="${{ secrets.SPRINT_MONGO_PASSWORD }}"
-          export DOCKER_IMAGE_TAG="openplatform/open-state:${{ env.IMAGE_TAG }}"
-          docker login -u ${{ secrets.DOCKERHUB_USER_NAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
-          docker-compose -f docker-compose.yml up -d
-          docker image ls --filter reference=openplatform/open-state:${{ env.IMAGE_TAG }} -q | tail -n +4 | xargs --no-run-if-empty docker image rm
-
-
   deploy-production:
     name: Deploy Production
     runs-on: ubuntu-latest
     continue-on-error: false
-    needs: [tests, build, package, deploy-sprint]
+    needs: [tests, build, package]
 
     steps:
 
