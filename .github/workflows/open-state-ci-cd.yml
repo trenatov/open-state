@@ -64,7 +64,6 @@ jobs:
           export DOCKER_IMAGE_TAG="openplatform/open-state:${{ env.IMAGE_TAG }}"
           docker login -u ${{ secrets.DOCKERHUB_USER_NAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
           docker-compose -f docker-compose.yml up -d
-
           ssh -i /dev/null gitlab@${{ secrets.PROD_SERVER }} "
                           docker stop open-state && \
                           IMG=\$(docker ps -a --filter='name=^/open-state$' --format='{{.Image}}') &&  \
@@ -74,4 +73,4 @@ jobs:
                         "
 
           docker pull openplatform/open-state:${{ env.IMAGE_TAG }}
-          docker run -d --name 'open-state' --restart=always openplatform/open-state:${{ env.IMAGE_TAG }}
+          docker run -d --name 'open-state' --restart=always -p 8080:8080 openplatform/open-state:${{ env.IMAGE_TAG }}
