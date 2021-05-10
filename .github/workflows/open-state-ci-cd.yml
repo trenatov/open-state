@@ -61,18 +61,18 @@ jobs:
           docker login -u ${{ secrets.DOCKERHUB_USER_NAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
           docker-compose -f docker-compose.yml up -d
           ssh -i /dev/null gitlab@${{ secrets.PROD_SERVER }} "
-                          docker stop open-state && \
+                          docker stop -f open-state && \
                           IMG=\$(docker ps -a --filter='name=^/open-state$' --format='{{.Image}}') &&  \
                           docker rm -f open-state && \
-                          docker rmi \$IMG; \
+                          docker rmi -f \$IMG; \
                           exit 0
                         "
 
           docker pull openplatform/open-state:${{ env.IMAGE_TAG }}
-          docker run -d --name 'open-state' --restart=always -p 8080:8080
-          -e "BITCOIN_NODE=${{ secrets.PROD_BITCOIN_NODE }}"
-          -e "BITCOIN_USERNAME=${{ secrets.PROD_BITCOIN_USERNAME }}"
-          -e "BITCOIN_PASSWORD=${{ secrets.PROD_BITCOIN_PASSWORD }}"
-          -e "ETHEREUM_NODE_ADDRESS=${{ secrets.PROD_ETHEREUM_NODE_ADDRESS }}"
-          -e "MONGODB_PASSWORD=${{ secrets.PROD_MONGO_PASSWORD }}"
+          docker run -d --name 'open-state' --restart=always -p 8080:8080 \
+          -e "BITCOIN_NODE=${{ secrets.PROD_BITCOIN_NODE }}" \
+          -e "BITCOIN_USERNAME=${{ secrets.PROD_BITCOIN_USERNAME }}" \
+          -e "BITCOIN_PASSWORD=${{ secrets.PROD_BITCOIN_PASSWORD }}" \
+          -e "ETHEREUM_NODE_ADDRESS=${{ secrets.PROD_ETHEREUM_NODE_ADDRESS }}" \
+          -e "MONGODB_PASSWORD=${{ secrets.PROD_MONGO_PASSWORD }}" \
           openplatform/open-state:${{ env.IMAGE_TAG }}
