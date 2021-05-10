@@ -64,10 +64,8 @@ jobs:
           export DOCKER_IMAGE_TAG="openplatform/open-state:${{ env.IMAGE_TAG }}"
           docker login -u ${{ secrets.DOCKERHUB_USER_NAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
 
-          sudo docker stop openplatform/open-state
-          sudo docker ps -a --filter='name=^/openplatform/open-state'
-          sudo docker rm -f openplatform/open-state
-          sudo docker rmi openplatform/open-state
+          sudo docker-compose up docker-compose.yml -d
+
           sudo docker pull openplatform/open-state:${{ env.IMAGE_TAG }}
           sudo docker run -d --name 'openplatform/open-state' --restart=always \
                                                -p 8080:8080 \
