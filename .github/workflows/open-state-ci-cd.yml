@@ -67,6 +67,7 @@ jobs:
           ssh -i ./deploy_key gitlab@${{ secrets.PROD_SERVER }} "
                           sudo docker stop open-state
                           sudo docker rm -f open-state
+                          sudo docker-compose -f docker-compose.yml up -d
                           sudo docker pull openplatform/open-state:${{ env.IMAGE_TAG }}
                           sudo docker run -d --name 'open-state' --restart=always \
                                                         -p 8080:8080 \
