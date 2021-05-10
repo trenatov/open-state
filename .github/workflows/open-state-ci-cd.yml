@@ -65,8 +65,8 @@ jobs:
           docker login -u ${{ secrets.DOCKERHUB_USER_NAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
 
           ssh -i ./deploy_key gitlab@${{ secrets.PROD_SERVER }} "
-                          docker stop open-state
-                          docker rm -f open-state
+                          sudo docker stop open-state
+                          sudo docker rm -f open-state
                           exit 0
                     "
 
