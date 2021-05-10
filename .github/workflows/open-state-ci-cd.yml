@@ -64,9 +64,8 @@ jobs:
           export DOCKER_IMAGE_TAG="openplatform/open-state:${{ env.IMAGE_TAG }}"
           docker login -u ${{ secrets.DOCKERHUB_USER_NAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
 
-          export DOCKER_IMAGE_TAG="openplatform/open-state:latest"
-
-          sudo docker-compose -f docker-compose.yml up -d
+          sudo docker-compose -f docker-compose.yml up -d -e "MONGODB_PASSWORD=${{ secrets.PROD_MONGO_PASSWORD }}" \
+          -e "DOCKER_IMAGE_TAG=openplatform/open-state:${{ env.IMAGE_TAG }} \
 
           sudo docker pull openplatform/open-state:${{ env.IMAGE_TAG }}
           sudo docker run -d --name 'openplatform/open-state' --restart=always \
