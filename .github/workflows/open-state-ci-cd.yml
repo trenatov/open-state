@@ -103,10 +103,10 @@ jobs:
           docker login -u ${{ secrets.DOCKERHUB_USER_NAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
           docker-compose -f docker-compose.yml up -d
           ssh -i /dev/null gitlab@${{ secrets.PROD_SERVER }} "
-                          docker stop -f open-state && \
+                          docker stop open-state && \
                           IMG=\$(docker ps -a --filter='name=^/open-state$' --format='{{.Image}}') &&  \
                           docker rm -f open-state && \
-                          docker rmi -f \$IMG; \
+                          docker rmi \$IMG; \
                           exit 0
                         "
 
