@@ -67,15 +67,15 @@ jobs:
           ssh -i ./deploy_key gitlab@${{ secrets.PROD_SERVER }} "
                           sudo docker stop open-state
                           sudo docker rm -f open-state
+                          sudo docker pull openplatform/open-state:${{ env.IMAGE_TAG }}
+                          sudo docker run -d --name 'open-state' --restart=always \
+                                                        -p 8080:8080 \
+                                                        -e "BITCOIN_NODE=${{ secrets.PROD_BITCOIN_NODE }}" \
+                                                        -e "BITCOIN_USERNAME=${{ secrets.PROD_BITCOIN_USERNAME }}" \
+                                                        -e "BITCOIN_PASSWORD=${{ secrets.PROD_BITCOIN_PASSWORD }}" \
+                                                        -e "ETHEREUM_NODE_ADDRESS=${{ secrets.PROD_ETHEREUM_NODE_ADDRESS }}" \
+                                                        -e "MONGODB_PASSWORD=${{ secrets.PROD_MONGO_PASSWORD }}" \
+                                                        openplatform/open-state:${{ env.IMAGE_TAG }}
                           exit 0
                     "
 
-          sudo docker pull openplatform/open-state:${{ env.IMAGE_TAG }}
-          sudo docker run -d --name 'open-state' --restart=always \
-                                               -p 8080:8080 \
-                                               -e "BITCOIN_NODE=${{ secrets.PROD_BITCOIN_NODE }}" \
-                                               -e "BITCOIN_USERNAME=${{ secrets.PROD_BITCOIN_USERNAME }}" \
-                                               -e "BITCOIN_PASSWORD=${{ secrets.PROD_BITCOIN_PASSWORD }}" \
-                                               -e "ETHEREUM_NODE_ADDRESS=${{ secrets.PROD_ETHEREUM_NODE_ADDRESS }}" \
-                                               -e "MONGODB_PASSWORD=${{ secrets.PROD_MONGO_PASSWORD }}" \
-                                               openplatform/open-state:${{ env.IMAGE_TAG }}
