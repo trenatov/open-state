@@ -63,5 +63,14 @@ jobs:
           export MONGODB_PASSWORD="${{ secrets.PROD_MONGO_PASSWORD }}"
           export DOCKER_IMAGE_TAG="openplatform/open-state:${{ env.IMAGE_TAG }}"
           docker login -u ${{ secrets.DOCKERHUB_USER_NAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
-
           docker-compose -f docker-compose.yml up -d
+          ssh -i ./deploy_key gitlab@${{ secrets.PROD_SERVER }} "
+                          docker stop open-state && \
+                          IMG=\$(docker ps -a --filter='name=^/open-state --format='{{.Image}}') &&  \
+                          docker rm -f open-state && \
+                          docker rmi \$IMG; \
+                          exit 0
+                        "
+          docker run -d --name open-state --restart=always
+                                    -p 8080:8080 \
+                                     openplatform/open-state:${{ env.IMAGE_TAG }}
