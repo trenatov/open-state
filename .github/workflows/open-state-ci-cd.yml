@@ -63,18 +63,4 @@ jobs:
           export MONGODB_PASSWORD="${{ secrets.PROD_MONGO_PASSWORD }}"
           export DOCKER_IMAGE_TAG="openplatform/open-state:${{ env.IMAGE_TAG }}"
           docker login -u ${{ secrets.DOCKERHUB_USER_NAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
-          docker-compose -f docker-compose.yml up -d
 
-          docker stop openplatform/open-state
-                    docker ps -a --filter='name=^/openplatform/open-state'
-                    docker rm -f openplatform/open-state
-                    docker rmi openplatform/open-state
-                    docker pull openplatform/open-state:${{ env.IMAGE_TAG }}
-                    docker run -d --name 'openplatform/open-state' --restart=always \
-                                               -p 8080:8080 \
-                                               -e "BITCOIN_NODE=${{ secrets.PROD_BITCOIN_NODE }}" \
-                                               -e "BITCOIN_USERNAME=${{ secrets.PROD_BITCOIN_USERNAME }}" \
-                                               -e "BITCOIN_PASSWORD=${{ secrets.PROD_BITCOIN_PASSWORD }}" \
-                                               -e "ETHEREUM_NODE_ADDRESS=${{ secrets.PROD_ETHEREUM_NODE_ADDRESS }}" \
-                                               -e "MONGODB_PASSWORD=${{ secrets.PROD_MONGO_PASSWORD }}" \
-                                               openplatform/open-state:${{ env.IMAGE_TAG }}
