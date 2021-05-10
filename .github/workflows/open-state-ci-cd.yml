@@ -74,6 +74,4 @@ jobs:
                         "
 
           docker pull openplatform/open-state:${{ env.IMAGE_TAG }}
-          docker run -d --name 'open-state' --restart=always
-                                    -p 8080:8080 \
-                                     openplatform/open-state:${{ env.IMAGE_TAG }}
+          docker run -d --name 'open-state' --restart=always -p 8080:8080 openplatform/open-state:${{ env.IMAGE_TAG }}
