@@ -99,7 +99,7 @@ jobs:
           chmod 644 ~/.ssh/known_hosts
           export DOCKER_HOST="ssh://gitlab@${{ secrets.PROD_SERVER }}"
           export MONGODB_PASSWORD="${{ secrets.PROD_MONGO_PASSWORD }}"
-          export BITCOIN_NODE="${{ secrets.PROD_BITCOIN_NODE }}"
+          export BITCOIN_NODE_ADDRESS="${{ secrets.PROD_BITCOIN_NODE }}"
           export BITCOIN_USERNAME="${{ secrets.PROD_BITCOIN_USERNAME }}"
           export BITCOIN_PASSWORD="${{ secrets.PROD_BITCOIN_PASSWORD }}"
           export ETHEREUM_NODE_ADDRESS="${{ secrets.PROD_ETHEREUM_NODE_ADDRESS }}"
